@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="d7808199-df62-48ed-aac4-2e9ed32c1108" >
+		<http:listener-connection host="localhost" port="8081" />
+	</http:listener-config>
+	<flow name="one" doc:id="6dd2ae7a-c4de-4002-a35a-573941dbd178" >
+		<http:listener doc:name="Listener" doc:id="0025f2e8-8f32-4460-b75a-73fb3602e9b3" config-ref="HTTP_Listener_config" path="/test"/>
+		<set-variable value="#[attributes.queryParams.v1]" doc:name="Set Variable" doc:id="936f5b03-4ce1-48f8-9ac6-c2d6f38e4049" variableName="v1" />
+		<set-payload value="#[vars.v1]" doc:name="Set Payload" doc:id="c73e3958-98e7-4b5c-b5ec-c3125f8a4f08" />
+		<set-variable value="10" doc:name="Set Variable" doc:id="10e83840-fd7c-462d-827d-39a99afac99a" variableName="v2" />
+		<logger level="INFO" doc:name="Logger" doc:id="75443f7a-985f-4b28-b0a1-54f9468c677c" message="#[vars.v2]" />
+		<logger level="INFO" doc:name="Logger" doc:id="2529fee6-752a-4aa2-9dfd-3583538d6436" message="#[payload]" />
+		<set-payload value="#[vars.v2]" doc:name="Set Payload" doc:id="4a37d2ab-7b9c-4cad-9eaf-011ed57f4a66" />
+		<logger level="INFO" doc:name="Logger" doc:id="4befe0b4-4fce-41ca-be0d-6a840ecc20b8" message="#[payload]" />
+	</flow>
+	<flow name="demo4Flow" doc:id="f2333482-13db-4a26-a346-e95a1372d274" >
+		<http:listener doc:name="Listener" doc:id="3c5797d4-73d6-4484-804f-b0adf2650b7d" config-ref="HTTP_Listener_config" path="/set"/>
+		<flow-ref doc:name="Flow Reference" doc:id="6edfac81-29e0-4e32-9d26-d8f056dbdb6f" name="one" />
+	</flow>
+</mule>
